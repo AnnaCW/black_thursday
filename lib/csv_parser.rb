@@ -9,6 +9,7 @@ class CsvParser
     end
   end
 
+# better naming, parse_merchants, ect. more description
 
   def items(items)
     contents = CSV.open items, headers: true, header_converters: :symbol
@@ -18,9 +19,9 @@ class CsvParser
   end
 
 
-  def clean_item_description(description)
-    description.gsub!("\n", " ")
-  end
+  # def clean_item_description(description)
+  #   description.gsub!("\n", " ")
+  # end
 
 
 end
