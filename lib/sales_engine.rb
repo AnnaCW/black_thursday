@@ -2,9 +2,12 @@ require_relative 'item_repository'
 require_relative 'merchant_repository'
 require_relative 'csv_parser'
 require_relative 'invoice_repository'
+require_relative 'invoice_item_repository'
+require_relative 'transaction_repository'
+require_relative 'customer_repository'
 
 class SalesEngine
-  attr_reader  :merchants_data, :items_data, :invoices_data
+  attr_reader  :merchants_data, :items_data,
 
   def initialize(items_data, merchants_data, invoices_data)
     @items_data = items_data
@@ -36,6 +39,10 @@ class SalesEngine
 
   def invoices
     @invoices ||= InvoiceRepository.new(invoices_data)
+  end
+
+  def customers
+    @customers ||= CustomerRepository.new
   end
 
   def items_by_merchant_id(merchant_id)
