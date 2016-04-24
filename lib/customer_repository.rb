@@ -3,7 +3,8 @@ require_relative 'customer'
 class CustomerRepository
   attr_reader :customers
 
-  def initialize(customers_data)
+  def from_csv(customers_csv)
+    customers_data = CsvParser.new.customers(customers_csv)
     @customers = create_customers(customers_data)
   end
 
@@ -22,10 +23,15 @@ class CustomerRepository
   end
 
   def find_all_by_first_name(first_name_fragment)
+    customers.find_all do |customer|
+      customer.first_name.downcase.include?(first_name_fragment.downcase)
+    end
   end
-#returns [] or match(es)
 
   def find_all_by_last_name(last_name_fragment)
+    customers.find_all do |customer|
+      customer.last_name.downcase.include?(last_name_fragment.downcase)
+    end
   end
 
   def inspect

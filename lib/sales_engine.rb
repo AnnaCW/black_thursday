@@ -2,19 +2,14 @@ require_relative 'item_repository'
 require_relative 'merchant_repository'
 require_relative 'csv_parser'
 require_relative 'invoice_repository'
-require_relative 'invoice_item_repository'
-require_relative 'transaction_repository'
 
 class SalesEngine
-  attr_reader  :merchants_data, :items_data, :invoices_data, :invoice_item_data, :transactions_data, :customers_data
+  attr_reader  :merchants_data, :items_data, :invoices_data
 
-  def initialize(items_data, merchants_data, invoices_data, invoice_item_data, transactions_data, customers_data)
+  def initialize(items_data, merchants_data, invoices_data)
     @items_data = items_data
     @merchants_data = merchants_data
     @invoices_data = invoices_data
-    @invoice_item_data = invoice_item_data
-    @transactions_data = transactions_data
-    @customers_data = customers_data
     set_merchant_items
     set_item_merchant
     set_merchant_for_invoice
@@ -25,16 +20,10 @@ class SalesEngine
     items_csv = csv_content[:items]
     merchants_csv = csv_content[:merchants]
     invoices_csv = csv_content[:invoices]
-    invoice_item_csv = csv_content[:invoice_items]
-    transactions_csv = csv_content[:transactions]
-    customers_csv = csv_content[:customers]
     items_data = CsvParser.new.items(items_csv)
     merchants_data = CsvParser.new.merchants(merchants_csv)
     invoices_data = CsvParser.new.invoices(invoices_csv)
-    invoice_item_data = CsvParser.new.invoice_items(invoice_item_csv)
-    transactions_data = CsvParser.new.transactions(transactions_csv)
-    customers_data = CsvParser.new.customers(customers_csv)
-    SalesEngine.new(items_data, merchants_data, invoices_data, invoice_item_data, transactions_data, customers_data)
+    SalesEngine.new(items_data, merchants_data, invoices_data)
   end
 
   def items
@@ -47,18 +36,6 @@ class SalesEngine
 
   def invoices
     @invoices ||= InvoiceRepository.new(invoices_data)
-  end
-
-  def invoice_items
-    @invoice_items ||= InvoiceItemRepository.new(invoice_item_data)
-  end
-
-  def transactions
-    @transactions ||= TransactionRepository.new(transactions_data)
-  end
-
-  def customers
-    @customers ||= CustomerRepository.new(customers_data)
   end
 
   def items_by_merchant_id(merchant_id)

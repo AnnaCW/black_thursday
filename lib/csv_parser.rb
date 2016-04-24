@@ -9,7 +9,6 @@ class CsvParser
     end
   end
 
-
   def items(items)
     contents = CSV.open items, headers: true, header_converters: :symbol
     contents.map do |row|

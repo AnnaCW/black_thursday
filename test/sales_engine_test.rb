@@ -4,8 +4,6 @@ require 'minitest/pride'
 require_relative '../lib/sales_engine'
 require_relative '../lib/csv_parser'
 require_relative'../lib/merchant_repository'
-require_relative'../lib/transaction_repository'
-require_relative'../lib/customer_repository.rb'
 
 class SalesEngineTest < MiniTest::Test
    attr_reader :se
@@ -14,10 +12,7 @@ class SalesEngineTest < MiniTest::Test
     @se = SalesEngine.from_csv({
       :items     => "./data/items.csv",
       :merchants => "./data/merchants.csv",
-      :invoices  => "./data/invoices.csv",
-      :invoice_items => "./data/invoice_items.csv",
-      :transactions => "./data/transactions.csv",
-      :customers => "./data/customers.csv",
+      :invoices  => "./data/invoices.csv"
     })
   end
 
@@ -31,18 +26,6 @@ class SalesEngineTest < MiniTest::Test
 
   def test_it_creates_merchant_repository_instance
     assert se.merchants
-  end
-
-  def test_it_creates_invoice_item_repository_instance
-    assert se.invoice_items
-  end
-
-  def test_it_creates_transaction_repository_instance
-    assert se.transactions
-  end
-
-  def test_it_creates_customer_repository_instance
-    assert se.customers
   end
 
   def test_it_finds_in_merchant_repository

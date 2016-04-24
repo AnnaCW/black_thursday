@@ -3,7 +3,8 @@ require_relative 'transaction'
 class TransactionRepository
   attr_reader :transactions
 
-  def initialize(transactions_data)
+  def from_csv(transactions_csv)
+    transactions_data = CsvParser.new.transactions(transactions_csv)
     @transactions = create_transactions(transactions_data)
   end
 

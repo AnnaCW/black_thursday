@@ -1,0 +1,4 @@
+id,invoice_id,credit_card_number,credit_card_expiration_date,result,created_at,updated_at
+6,8,4242424242424242,0220,success,2012-02-26 23:56:56 UTC,2012-02-27 00:56:56 UTC
+7,10,1111111111111111,0321,success,2012-02-26 20:56:56 UTC,2012-02-26 20:56:56 UTC
+13,10,6666666666666666,0622,failed,2012-02-26 20:56:57 UTC,2012-02-26 20:56:57 UTC

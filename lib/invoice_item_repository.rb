@@ -3,7 +3,8 @@ require_relative 'invoice_item'
 class InvoiceItemRepository
   attr_reader :invoice_items
 
-  def initialize(invoice_items_data)
+  def from_csv(invoice_item_csv)
+    invoice_items_data = CsvParser.new.invoice_items(invoice_item_csv)
     @invoice_items = create_invoice_items(invoice_items_data)
   end
 
