@@ -164,13 +164,15 @@ class SalesAnalyst
   end
 
   def total_revenue_by_date(date)
-    ii = []
-    invoice_items.all.each do |invoice_item|
-      if Time.parse(invoice_item.created_at.strftime("%Y-%m-%d")) <= date
-      ii << invoice_item.unit_price
-      end
+    array = []
+    invoices.all.each do |invoice|
+      array << get_invoice_item_unit_price(invoice.id) if invoice.created_at.strftime("%Y-%m-%d") == date.strftime("%Y-%m-%d")
     end
-    ii.reduce(:+).to_f
+    array.reduce(:+)
+  end
+
+  def get_invoice_item_unit_price(invoice_id)
+    invoices.find_by_id(invoice_id).paid_total
   end
 
   def merchants_with_pending_invoices
@@ -208,7 +210,7 @@ class SalesAnalyst
     end
   end
 
-  def top_revenue_earners(x=20)
+  def top_revenue_earners(x = 20)
     merchants_ranked_by_revenue.take(x)
   end
 
