@@ -87,7 +87,7 @@ class SalesAnalystTest < MiniTest::Test
     assert sa.days_with_invoices
   end
 
-  def test_it_counts_invoices_per_day_small_data_set
+  def test_it_counts_invoices_per_day
     assert_equal ({"Saturday"=>8}), sa.days_with_count[0]
   end
 
@@ -123,11 +123,10 @@ class SalesAnalystTest < MiniTest::Test
     assert_equal 3, sa.merchants_with_pending_invoices.length
   end
 
-  # def test_it_finds_merchants_with_one_item
-  #   assert_equal 2, sa.merchants_with_only_one_item.length
-  # end
-  #actual 0
-  #
+  def test_it_finds_merchants_with_one_item
+    assert_equal 0, sa.merchants_with_only_one_item.length
+  end
+
   def test_it_finds_most_sold_items_for_merchant
     assert_equal [], sa.most_sold_item_for_merchant(12334155)
   end
@@ -140,10 +139,40 @@ class SalesAnalystTest < MiniTest::Test
     assert_equal nil, sa.best_item_for_merchant(12334113)
   end
 
-  # def test_it_finds_best_item_for_merchant
-  #   assert_equal [], sa.best_item_for_merchant(12334105)
-  # end
+  def test_it_can_find_revenue_of_a_given_merchant
+    assert_equal 1964.05, sa.revenue_by_merchant(12334113).to_f
+  end
 
+  def test_it_creates_a_hash_of_merchants_and_their_revenues
+    assert_equal "Shopin1901", sa.merchant_revenues[0][:merchant].name
+  end
 
+  def test_it_sorts_merchants_by_their_revenue_low_to_high
+    assert_equal 0, sa.ranked_merchants[0][:revenue]
+    assert_equal 30158.61, sa.ranked_merchants[-1][:revenue].to_f
+  end
 
+  def test_it_can_rank_merchants_by_their_revenue
+    assert_equal "Candisart", sa.merchants_ranked_by_revenue[0].name
+  end
+
+  def test_it_takes_twenty_top_revenue_earners_by_default
+    assert_equal 20, sa.top_revenue_earners.count
+  end
+
+  def test_it_can_be_passed_how_many_top_revenue_earners_desired
+    assert_equal 5, sa.top_revenue_earners(5).count
+  end
+
+  def test_it_can_return_merchants_created_in_a_specific_month
+    assert_equal 7, sa.merchants_created_in_month("March").count
+  end
+
+  def test_the_months_taken_are_very_case_insensitive
+    assert_equal 7, sa.merchants_created_in_month("mArCh").count
+  end
+
+  def test_it_can_find_the_merchants_that_have_one_item_registered_in_a_month
+    assert_equal 0, sa.merchants_with_only_one_item_registered_in_month("March").count
+  end
 end
