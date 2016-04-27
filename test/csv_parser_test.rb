@@ -3,35 +3,30 @@ require 'minitest/autorun'
 require_relative '../lib/csv_parser'
 
 class CsvParserTest < Minitest::Test
-
-  attr_reader :parser
+  attr_reader :parser, :transactions
 
   def setup
-    @parser = CsvParser.new
+    @parser = CsvParser.new.collect_data({
+      :transactions => "./test/test_csvs/transactions_test.csv"
+    })
+    @transactions = parser[:transactions]
   end
 
   def it_instantiates_parser
     assert parser
   end
 
-  def test_it_parses_merchant_csv_into_array
-    assert_equal Array, parser.merchants("./data/merchants.csv").class
+  def test_it_parses_data_into_array_of_hashes
+    assert_equal Array, transactions.class
+    assert_equal Hash, transactions[0].class
   end
 
-  def test_it_parses_each_merchant_into_hash
-    assert_equal "12334105", parser.merchants("./data/merchants.csv")[0][:id]
+  def test_it_finds_first_transaction
+    assert_equal "1", transactions[0][:id]
   end
 
-  def test_it_parses_items_csv_into_array
-    assert_equal Array, parser.items("./data/items.csv").class
-  end
-
-  def test_it_parses_each_item_into_hash_and_finds_id
-    assert_equal "263395237", parser.items("./data/items.csv")[0][:id]
-  end
-
-  def test_it_parses_each_item_into_hash_and_finds_name
-    assert_equal "510+ RealPush Icon Set", parser.items("./data/items.csv")[0][:name]
+  def test_it_loads_all_transactions
+    assert_equal 50, transactions.count
   end
 
 end
